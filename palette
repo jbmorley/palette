@@ -2,7 +2,6 @@
 
 import argparse
 import cv2
-import json
 import numpy as np
 
 
@@ -26,17 +25,21 @@ def main():
     # Convert the selected colors back to uint8.
     center = np.uint8(center)
 
-    # Flatten and save the image.
-    res = center[label.flatten()]
-    res2 = res.reshape((img.shape))
-    cv2.imwrite(options.output, res2)
-
     # Get the hex colors (bgr->rgb).
     hex_colors = []
     for color in center:
         b, g, r = color
         hex_colors.append("%02x%02x%02x" % (r, g, b))
-    print(json.dumps({'colors': hex_colors}, indent=4))
+
+    with open('palette.html', 'w') as fh:
+        fh.write("<style>.color { width: 100px; height: 100px; }</style>\n")
+        for color in hex_colors:
+            fh.write("<div class='color' style='background-color: #%s;'></div>\n" % color)
+
+    res = center[label.flatten()]
+    res2 = res.reshape((img.shape))
+
+    cv2.imwrite(options.output, res2)
 
 
 if __name__ == "__main__":
