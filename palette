@@ -36,6 +36,10 @@ def main():
         for color in hex_colors:
             fh.write("<div class='color' style='background-color: #%s;'></div>\n" % color)
 
+    # Summarize the colors to the console.
+    for hex_color in hex_colors:
+        print(f"#{hex_color}")
+
     res = center[label.flatten()]
     res2 = res.reshape((img.shape))
 
